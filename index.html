@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zitka — IT, 3D Tisk & Weby</title>
+    <meta name="description" content="Profesionální IT služby, 3D tisk na míru a tvorba webových stránek. Rychle, spolehlivě, za rozumné ceny.">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- HEADER -->
+<header id="header">
+    <nav class="nav-container">
+        <a href="#" class="logo">
+            <span class="logo-icon">⚡</span>
+            <span id="siteTitle">Zitka</span>
+        </a>
+        <ul class="nav-links">
+            <li><a href="#services">Služby</a></li>
+            <li><a href="#jak-to-funguje">Jak to funguje</a></li>
+            <li><a href="#o-mne">O mně</a></li>
+            <li><a href="#kontakt">Kontakt</a></li>
+        </ul>
+        <div class="header-actions">
+            <button class="btn-primary" onclick="scrollToSection('kontakt')">Nezávazná poptávka</button>
+            <button class="admin-login-btn" id="loginBtn" title="Admin přihlášení" onclick="handleLogin()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                    <circle cx="12" cy="7" r="4"/>
+                </svg>
+            </button>
+        </div>
+    </nav>
+</header>
+
+<!-- HERO -->
+<section id="hero">
+    <div class="hero-content">
+        <div class="hero-badge">Dostupné pro domácnosti i malé firmy</div>
+        <h1 id="heroTitle">Vyřeším IT, vytisknu<br><span class="gradient-text">co potřebujete,<br>nebo postavím web.</span></h1>
+        <p class="hero-sub" id="heroSub">Jsem freelancer z ČR. Nabízím IT podporu, 3D tisk na míru a tvorbu webových stránek. Rychle, poctivě a za rozumnou cenu.</p>
+        <div class="hero-btns">
+            <button class="btn-primary btn-lg" onclick="scrollToSection('services')">Prozkoumat služby</button>
+            <button class="btn-ghost btn-lg" onclick="scrollToSection('kontakt')">Napsat mi →</button>
+        </div>
+        <div class="hero-stats">
+            <div class="stat"><span class="stat-num" id="statProjects">20+</span><span class="stat-label">Projektů</span></div>
+            <div class="stat-divider"></div>
+            <div class="stat"><span class="stat-num">24h</span><span class="stat-label">Odezva</span></div>
+            <div class="stat-divider"></div>
+            <div class="stat"><span class="stat-num">100%</span><span class="stat-label">Spokojenost</span></div>
+        </div>
+    </div>
+    <div class="hero-visual" aria-hidden="true">
+        <div class="hero-orb orb1"></div>
+        <div class="hero-orb orb2"></div>
+        <div class="floating-card card1"><span class="fc-icon">💻</span><span>IT Podpora</span></div>
+        <div class="floating-card card2"><span class="fc-icon">🖨️</span><span>3D Tisk</span></div>
+        <div class="floating-card card3"><span class="fc-icon">🌐</span><span>Weby</span></div>
+    </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+    <div class="section-header">
+        <p class="section-label">Co nabízím</p>
+        <h2>Vyberte si <span class="gradient-text">svou službu</span></h2>
+        <p class="section-sub">Klikněte na kartu pro více informací nebo rovnou pošlete poptávku</p>
+    </div>
+    <div class="services-grid" id="servicesGrid">
+        <div class="service-skeleton"></div>
+        <div class="service-skeleton"></div>
+        <div class="service-skeleton"></div>
+    </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<div class="alt-bg-wrap">
+<section id="jak-to-funguje">
+    <div class="section-header">
+        <p class="section-label">Jak to funguje</p>
+        <h2>Jednoduše <span class="gradient-text">ve 3 krocích</span></h2>
+    </div>
+    <div class="steps-grid">
+        <div class="step">
+            <div class="step-num">01</div>
+            <h3>Pošlete poptávku</h3>
+            <p>Vyplňte kontaktní formulář níže a popište, co potřebujete. Zdarma a nezávazně.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+            <div class="step-num">02</div>
+            <h3>Domluvíme se</h3>
+            <p>Ozvu se do 24 hodin, probereme detaily a dohodnu se na ceně a termínu.</p>
+        </div>
+        <div class="step-arrow">→</div>
+        <div class="step">
+            <div class="step-num">03</div>
+            <h3>Hotovo!</h3>
+            <p>Odvedeme práci na 100% a platíte až po dodání. Vaše spokojenost je na prvním místě.</p>
+        </div>
+    </div>
+</section>
+</div>
+
+<!-- ABOUT -->
+<section id="o-mne">
+    <div class="about-container">
+        <div class="about-visual">
+            <div class="about-avatar"><span>Z</span></div>
+            <div class="about-tags">
+                <span class="tag">🔧 IT Specialista</span>
+                <span class="tag">🖨️ 3D Tisk</span>
+                <span class="tag">💻 Web Dev</span>
+                <span class="tag">🇨🇿 ČR</span>
+            </div>
+        </div>
+        <div class="about-content">
+            <p class="section-label">O mně</p>
+            <h2 id="aboutHeading">Jsem freelancer<br><span class="gradient-text">který to opravdu umí</span></h2>
+            <p class="about-text" id="aboutText">Zabývám se IT službami, 3D tiskem a tvorbou webů. Mám praktické zkušenosti a přistupuji ke každému projektu individuálně. Pracuji rychle, komunikuji jasně a platíte až po dodání výsledku.</p>
+            <div class="about-skills">
+                <div class="skill-item"><span class="skill-icon">✓</span><span>Rychlá odezva do 24 hodin</span></div>
+                <div class="skill-item"><span class="skill-icon">✓</span><span>Platba až po dodání</span></div>
+                <div class="skill-item"><span class="skill-icon">✓</span><span>Férové ceny bez skrytých poplatků</span></div>
+                <div class="skill-item"><span class="skill-icon">✓</span><span>Podpora po dokončení projektu</span></div>
+            </div>
+            <button class="btn-primary" onclick="scrollToSection('kontakt')">Kontaktovat →</button>
+        </div>
+    </div>
+</section>
+
+<!-- CONTACT -->
+<section id="kontakt">
+    <div class="section-header">
+        <p class="section-label">Kontakt</p>
+        <h2>Napište mi <span class="gradient-text">nezávaznou poptávku</span></h2>
+        <p class="section-sub">Odpovím do 24 hodin na váš email</p>
+    </div>
+    <div class="contact-wrapper">
+        <form class="contact-form" id="contactForm" onsubmit="submitInquiry(event)">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="inp-name">Jméno *</label>
+                    <input type="text" id="inp-name" placeholder="Jan Novák" required autocomplete="name">
+                </div>
+                <div class="form-group">
+                    <label for="inp-email">Email *</label>
+                    <input type="email" id="inp-email" placeholder="jan@email.cz" required autocomplete="email">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="inp-service">Služba</label>
+                <select id="inp-service">
+                    <option value="">Vyberte službu (nepovinné)</option>
+                    <option value="it">IT Služby</option>
+                    <option value="3d">3D Tisk</option>
+                    <option value="web">Webové stránky</option>
+                    <option value="other">Jiné</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="inp-message">Zpráva *</label>
+                <textarea id="inp-message" rows="5" placeholder="Popište co potřebujete, čím více detailů, tím lépe..." required></textarea>
+            </div>
+            <button type="submit" class="btn-primary btn-lg btn-full" id="submitBtn">
+                <span id="submitText">Odeslat poptávku</span>
+                <span id="submitSpinner" class="spinner" style="display:none"></span>
+            </button>
+            <div id="formMsg" class="form-msg"></div>
+        </form>
+        <aside class="contact-info">
+            <div class="contact-card">
+                <h3>Přímý kontakt</h3>
+                <div class="contact-item">
+                    <span class="ci-icon">📧</span>
+                    <div>
+                        <p class="ci-label">Email</p>
+                        <p class="ci-val" id="contactEmailVal">zitkatomik007@gmail.com</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <span class="ci-icon">📍</span>
+                    <div>
+                        <p class="ci-label">Lokalita</p>
+                        <p class="ci-val" id="contactLocationVal">Česká republika</p>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <span class="ci-icon">⏰</span>
+                    <div>
+                        <p class="ci-label">Odezva</p>
+                        <p class="ci-val">Do 24 hodin</p>
+                    </div>
+                </div>
+            </div>
+            <div class="trust-badges">
+                <div class="trust-item">🔒 Vaše údaje jsou v bezpečí</div>
+                <div class="trust-item">💳 Platba až po dodání</div>
+                <div class="trust-item">🤝 Nezávazná konzultace zdarma</div>
+            </div>
+        </aside>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-inner">
+        <div class="footer-brand">
+            <span class="logo-icon">⚡</span>
+            <span>Zitka</span>
+        </div>
+        <p class="footer-copy">© 2025 Zitka. Všechna práva vyhrazena.</p>
+        <nav class="footer-links">
+            <a href="#services">Služby</a>
+            <a href="#o-mne">O mně</a>
+            <a href="#kontakt">Kontakt</a>
+        </nav>
+    </div>
+</footer>
+
+<!-- ADMIN BAR (hidden until admin logs in) -->
+<div id="adminBar">
+    <div class="admin-bar-inner">
+        <span class="admin-badge">⚡ Admin</span>
+        <button onclick="showInquiries()">📬 Poptávky <span id="inquiryBadge" class="badge" style="display:none"></span></button>
+        <button onclick="editHero()">✏️ Hero</button>
+        <button onclick="editAbout()">✏️ O mně</button>
+        <button onclick="handleLogout()" class="btn-danger">Odhlásit</button>
+    </div>
+</div>
+
+<!-- MODAL: INQUIRIES -->
+<div id="inquiriesModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="inq-title">
+    <div class="modal-overlay" onclick="closeModal('inquiriesModal')"></div>
+    <div class="modal-box modal-wide">
+        <div class="modal-header">
+            <h3 id="inq-title">📬 Poptávky</h3>
+            <button onclick="closeModal('inquiriesModal')" class="modal-close" aria-label="Zavřít">✕</button>
+        </div>
+        <div id="inquiriesList" class="inquiries-list"></div>
+    </div>
+</div>
+
+<!-- MODAL: EDIT -->
+<div id="editModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="edit-title">
+    <div class="modal-overlay" onclick="closeModal('editModal')"></div>
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 id="edit-title">Upravit</h3>
+            <button onclick="closeModal('editModal')" class="modal-close" aria-label="Zavřít">✕</button>
+        </div>
+        <div id="editModalContent" class="modal-body"></div>
+        <div class="modal-footer">
+            <button onclick="closeModal('editModal')" class="btn-ghost">Zrušit</button>
+            <button onclick="saveEdit()" class="btn-primary" id="saveEditBtn">Uložit změny</button>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL: SERVICE DETAIL -->
+<div id="serviceModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="svc-title">
+    <div class="modal-overlay" onclick="closeModal('serviceModal')"></div>
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 id="svc-title"></h3>
+            <button onclick="closeModal('serviceModal')" class="modal-close" aria-label="Zavřít">✕</button>
+        </div>
+        <div id="serviceModalContent" class="modal-body"></div>
+        <div class="modal-footer">
+            <button onclick="closeModal('serviceModal')" class="btn-ghost">Zavřít</button>
+            <button onclick="closeModal('serviceModal'); scrollToSection('kontakt')" class="btn-primary">Mám zájem →</button>
+        </div>
+    </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
