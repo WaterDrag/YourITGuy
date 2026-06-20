@@ -105,6 +105,7 @@ body.admin-active { padding-bottom: 60px; }
 }
 .admin-login-btn:hover { color: var(--text); border-color: var(--border-h); }
 .admin-login-btn.is-admin { background: var(--grad); border: none; color: #fff; }
+.admin-login-btn.is-user  { background: var(--bg3); border-color: var(--border-h); color: var(--text); }
 
 /* ── BUTTONS ─────────────────────────────────── */
 .btn-primary {

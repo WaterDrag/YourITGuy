@@ -1,9 +1,20 @@
 import { initializeApp }                         from 'https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
                                                   from 'https://www.gstatic.com/firebasejs/10.13.0/firebase-auth.js';
-import { getFirestore, doc, getDoc, setDoc, collection, addDoc, getDocs, updateDoc, serverTimestamp, query, orderBy }
+import { getFirestore, doc, getDoc, setDoc, collection, addDoc, getDocs, updateDoc, serverTimestamp, query, orderBy, where }
                                                   from 'https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore.js';
 import { firebaseConfig }                         from './firebase-config.js';
+import emailjs                                    from 'https://cdn.jsdelivr.net/npm/@emailjs/browser@4/+esm';
+
+// ── EmailJS config ────────────────────────────────────────────
+// Zaregistruj se na emailjs.com, přidej Gmail službu a vytvoř šablonu
+// Pak sem doplň svoje hodnoty:
+const EMAILJS_SERVICE_ID  = 'service_8sh2b33';
+const EMAILJS_TEMPLATE_ID = 'template_oyz347j';
+const EMAILJS_PUBLIC_KEY  = 'GY-py_nH6Qm2ZuXRl';
+
+const emailjsReady = !EMAILJS_PUBLIC_KEY.startsWith('VLOZ');
+if (emailjsReady) emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
 
 // ── Init ─────────────────────────────────────────────────────
 let app, auth, db, firebaseReady = false;
@@ -48,7 +59,7 @@ const DEFAULT_SERVICES = [
         shortDesc: 'Moderní, rychlý a responzivní web. Portfolio, landing page nebo firemní prezentace.',
         longDesc: 'Tvořím moderní webové stránky přizpůsobené vašim potřebám. Každý web je responzivní (funguje na mobilu i PC), rychlý a profesionálně vypadající. Nabízím také správu a hosting.',
         features: ['Responzivní design (mobil i PC)', 'Portfolio, landing page, firemní web', 'Správa a hosting webu', 'Základní SEO optimalizace', 'Možnost e-shopu'],
-        priceFrom: '3 000 Kč',
+        priceFrom: '500 Kč',
         badge: ''
     }
 ];
@@ -96,12 +107,27 @@ if (firebaseReady) {
 }
 
 function updateAuthUI() {
-    const loginBtn  = document.getElementById('loginBtn');
-    const adminBar  = document.getElementById('adminBar');
+    const loginBtn   = document.getElementById('loginBtn');
+    const adminBar   = document.getElementById('adminBar');
+    const myInqBtn   = document.getElementById('myInqBtn');
+    const isLoggedIn = !!currentUser;
+
+    // Login button — avatar písmeno nebo ikona
+    if (isLoggedIn) {
+        const initial = (currentUser.displayName || currentUser.email || '?')[0].toUpperCase();
+        loginBtn.innerHTML = `<span style="font-size:0.85rem;font-weight:700">${initial}</span>`;
+        loginBtn.title     = currentUser.email;
+        loginBtn.onclick   = handleLogout;
+    } else {
+        loginBtn.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`;
+        loginBtn.title     = 'Přihlásit se';
+        loginBtn.onclick   = handleLogin;
+    }
 
     loginBtn.classList.toggle('is-admin', isAdmin);
-    loginBtn.title = isAdmin ? 'Admin: ' + currentUser.email : 'Admin přihlášení';
+    loginBtn.classList.toggle('is-user', isLoggedIn && !isAdmin);
 
+    // Admin bar
     if (isAdmin) {
         adminBar.style.display = 'block';
         document.body.classList.add('admin-active');
@@ -111,6 +137,9 @@ function updateAuthUI() {
         document.body.classList.remove('admin-active');
         document.querySelectorAll('.service-edit-btn').forEach(b => b.style.display = 'none');
     }
+
+    // Tlačítko "Moje poptávky" — jen pro přihlášené ne-adminy
+    if (myInqBtn) myInqBtn.style.display = (isLoggedIn && !isAdmin) ? 'flex' : 'none';
 }
 
 // ── Načtení obsahu ────────────────────────────────────────────
@@ -222,6 +251,19 @@ window.submitInquiry = async e => {
     try {
         if (!firebaseReady) throw new Error('Firebase není nakonfigurován. Napiš mi přímo na email.');
         await addDoc(collection(db, 'inquiries'), { ...data, createdAt: serverTimestamp(), status: 'new' });
+
+        // Pošli emailovou notifikaci
+        if (emailjsReady) {
+            const svcLabel = { it: 'IT Služby', '3d': '3D Tisk', web: 'Webové stránky', other: 'Jiné' };
+            await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                from_name:    data.name,
+                from_email:   data.email,
+                service_name: svcLabel[data.service] || 'Nevybráno',
+                message:      data.message,
+                to_email:     'zitkatomik007@gmail.com',
+            });
+        }
+
         msg.textContent = '✓ Poptávka odeslána! Ozvu se do 24 hodin.';
         msg.className   = 'form-msg success';
         document.getElementById('contactForm').reset();
@@ -297,6 +339,45 @@ window.markRead = async id => {
 
 window.replyInquiry = (email, name) => {
     location.href = `mailto:${email}?subject=Re%3A+Va%C5%A1e+popt%C3%A1vka&body=Dobr%C3%BD+den+${encodeURIComponent(name)}%2C%0A%0A`;
+};
+
+// ── User: Moje poptávky ───────────────────────────────────────
+window.showMyInquiries = async () => {
+    if (!currentUser) { showToast('Nejsi přihlášen.', 'error'); return; }
+    openModal('myInquiriesModal');
+    const list = document.getElementById('myInquiriesList');
+    list.innerHTML = '<p class="inquiry-empty">Načítám...</p>';
+
+    try {
+        const snap = await getDocs(query(collection(db, 'inquiries'), where('email', '==', currentUser.email)));
+        if (snap.empty) { list.innerHTML = '<p class="inquiry-empty">Zatím žádné poptávky 📭</p>'; return; }
+
+        const svcLabel = { it: 'IT Služby', '3d': '3D Tisk', web: 'Webové stránky', other: 'Jiné' };
+        const sorted   = snap.docs.sort((a, b) => {
+            const ta = a.data().createdAt?.toDate?.()?.getTime() || 0;
+            const tb = b.data().createdAt?.toDate?.()?.getTime() || 0;
+            return tb - ta;
+        });
+
+        list.innerHTML = sorted.map(d => {
+            const it  = d.data();
+            const dt  = it.createdAt?.toDate?.()?.toLocaleString('cs-CZ', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit' }) || '—';
+            const statusLabel = it.status === 'new'
+                ? '<span style="color:#a5b4fc;font-size:0.75rem;font-weight:600">● Čeká na odpověď</span>'
+                : '<span style="color:var(--success);font-size:0.75rem;font-weight:600">● Přečteno</span>';
+            return `
+                <div class="inquiry-item">
+                    <div class="inquiry-meta">
+                        ${it.service ? `<span class="inquiry-svc">${svcLabel[it.service] || it.service}</span>` : '<span></span>'}
+                        <span class="inquiry-date">${dt}</span>
+                    </div>
+                    <p class="inquiry-msg">${escHtml(it.message)}</p>
+                    <div style="margin-top:0.5rem">${statusLabel}</div>
+                </div>`;
+        }).join('');
+    } catch (err) {
+        list.innerHTML = `<p class="inquiry-empty" style="color:var(--error)">${err.message}</p>`;
+    }
 };
 
 async function loadInquiryBadge() {

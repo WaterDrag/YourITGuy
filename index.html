@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zitka — IT, 3D Tisk & Weby</title>
+    <title>IT, 3D Tisk & Weby</title>
     <meta name="description" content="Profesionální IT služby, 3D tisk na míru a tvorba webových stránek. Rychle, spolehlivě, za rozumné ceny.">
     <link rel="stylesheet" href="css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,7 +16,7 @@
     <nav class="nav-container">
         <a href="#" class="logo">
             <span class="logo-icon">⚡</span>
-            <span id="siteTitle">Zitka</span>
+            <span id="siteTitle">YourITGuy</span>
         </a>
         <ul class="nav-links">
             <li><a href="#services">Služby</a></li>
@@ -26,7 +26,8 @@
         </ul>
         <div class="header-actions">
             <button class="btn-primary" onclick="scrollToSection('kontakt')">Nezávazná poptávka</button>
-            <button class="admin-login-btn" id="loginBtn" title="Admin přihlášení" onclick="handleLogin()">
+            <button class="btn-ghost" id="myInqBtn" style="display:none" onclick="showMyInquiries()">Moje poptávky</button>
+            <button class="admin-login-btn" id="loginBtn" title="Přihlásit se" onclick="handleLogin()">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
                     <circle cx="12" cy="7" r="4"/>
@@ -211,7 +212,6 @@
     <div class="footer-inner">
         <div class="footer-brand">
             <span class="logo-icon">⚡</span>
-            <span>Zitka</span>
         </div>
         <p class="footer-copy">© 2025 Zitka. Všechna práva vyhrazena.</p>
         <nav class="footer-links">
@@ -230,6 +230,18 @@
         <button onclick="editHero()">✏️ Hero</button>
         <button onclick="editAbout()">✏️ O mně</button>
         <button onclick="handleLogout()" class="btn-danger">Odhlásit</button>
+    </div>
+</div>
+
+<!-- MODAL: MOJE POPTÁVKY (pro přihlášené uživatele) -->
+<div id="myInquiriesModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="my-inq-title">
+    <div class="modal-overlay" onclick="closeModal('myInquiriesModal')"></div>
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3 id="my-inq-title">📋 Moje poptávky</h3>
+            <button onclick="closeModal('myInquiriesModal')" class="modal-close" aria-label="Zavřít">✕</button>
+        </div>
+        <div id="myInquiriesList" class="inquiries-list modal-body"></div>
     </div>
 </div>
 
